@@ -1,7 +1,7 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Text, View} from 'react-native';
-import {Gap, TextInput, Button} from '../components';
-import {getData, showMessage, storeData, useForm} from '../utils';
+import {Button, Gap, TextInput} from '../components';
+import {getData, removeIndex, removeValue, storeData2, useForm} from '../utils';
 
 const Form = ({params}) => {
   const [form, setForm] = useForm({
@@ -9,21 +9,22 @@ const Form = ({params}) => {
     body: 'Emang cincayy tidak mahal tidak lebayy',
     userId: 1,
   });
-  const [title, setTitle] = useState('');
-  const [body, setBody] = useState('');
   const onSubmit = () => {
-    console.log('isi data sebelum AsyncStorage :', form);
-    storeData('form', form).then(() => {
-      getDataForm();
+    storeData2('form', form);
+  };
+  const onGetAllData = () => {
+    getData('form').then(res => {
+      console.log(res);
     });
   };
+  const onRemoveAll = () => {
+    removeValue('form');
+  };
+  const onRemove = () => {
+    removeIndex('form', form.title);
+  };
   const getDataForm = () => {
-    getData('form').then(res => {
-      console.log('isi data setelah AsyncStorage :', res);
-      setTitle(res.title);
-      setBody(res.body);
-      showMessage('success menyimpan', 'success');
-    });
+    console.log('isian form :', form);
   };
   return (
     <View style={{flex: 1, backgroundColor: 'white'}}>
@@ -51,11 +52,26 @@ const Form = ({params}) => {
           textColor={'white'}
         />
         <Gap height={16} />
-        <View style={{flex: 1}}>
-          <Text>Title : {title}</Text>
-          <Gap height={5} />
-          <Text>Body : {body}</Text>
-        </View>
+        <Button
+          text="Remove"
+          onPress={onRemove}
+          color={'grey'}
+          textColor={'white'}
+        />
+        <Gap height={16} />
+        <Button
+          text="Remove All"
+          onPress={onRemoveAll}
+          color={'blue'}
+          textColor={'white'}
+        />
+        <Gap height={16} />
+        <Button
+          text="Get All Data"
+          onPress={onGetAllData}
+          color={'green'}
+          textColor={'white'}
+        />
       </View>
     </View>
   );
