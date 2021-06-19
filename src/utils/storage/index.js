@@ -6,7 +6,7 @@ export const storeData = async (storageKey, value) => {
   try {
     const jsonValue = JSON.stringify(value);
     await AsyncStorage.setItem(storageKey, jsonValue);
-    showMessage('Berhasil menyimpan di localstorage', 'success');
+    // showMessage('Berhasil menyimpan di localstorage', 'success');
   } catch (e) {
     showMessage('Gagal menyimpan di localstorage');
   }
@@ -41,7 +41,7 @@ export const removeIndex = async (storageKey, value) => {
         if (arg > -1) {
           jsonValue.splice(arg, 1);
           storeData(storageKey, jsonValue).then(() => {
-            showMessage(`Berhasil remove item ${arg} `, 'success');
+            // showMessage(`Berhasil remove item ${arg} `, 'success');
             getData(storageKey).then(res => {
               console.log(res);
             });
@@ -71,7 +71,7 @@ export const storeData2 = (storageKey, value) => {
         () => {
           getData(storageKey).then(res => {
             console.log(res);
-            showMessage('Berhasil menyimpan di localstorage', 'success');
+            // showMessage('Berhasil menyimpan di localstorage', 'success');
           });
         },
       );
