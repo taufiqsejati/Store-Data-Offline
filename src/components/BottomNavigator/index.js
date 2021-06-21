@@ -11,9 +11,15 @@ const Icon = ({label, focus}) => {
       );
     case 'Storage':
       return focus ? (
-        <Ionicons name={'md-hardware-chip'} size={24} />
+        <Ionicons name={'md-hardware-chip-sharp'} size={24} />
       ) : (
         <Ionicons name={'md-hardware-chip-outline'} size={24} />
+      );
+    case 'Sync':
+      return focus ? (
+        <Ionicons name={'rocket-sharp'} size={24} />
+      ) : (
+        <Ionicons name={'rocket-outline'} size={24} />
       );
     default:
       return <Ionicons name={'ios-send'} size={24} />;
@@ -85,6 +91,6 @@ const styles = StyleSheet.create({
     paddingTop: 15,
     paddingBottom: 13,
     paddingHorizontal: 50,
-    justifyContent: 'space-around',
+    justifyContent: 'space-between',
   },
 });

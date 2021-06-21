@@ -69,8 +69,15 @@ const Storage = ({params}) => {
       });
   };
   return (
-    <View style={{flex: 1, padding: 16}}>
-      <Text style={{fontSize: 16, fontWeight: '500'}}>Storage Offline</Text>
+    <View
+      style={{
+        flex: 1,
+        paddingHorizontal: 16,
+        paddingTop: 16,
+      }}>
+      <Text style={{fontSize: 16, fontWeight: '500', marginBottom: 16}}>
+        Storage Offline
+      </Text>
       <FlatList
         showsVerticalScrollIndicator={false}
         data={list}
@@ -94,7 +101,7 @@ const Storage = ({params}) => {
                 shadowOffset: {width: 0, height: 7},
                 shadowOpacity: 0.5,
                 shadowRadius: 10,
-                marginTop: 16,
+                marginBottom: 16,
                 overflow: 'hidden',
               }}>
               <View

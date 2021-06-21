@@ -13,6 +13,7 @@ const MainApp = () => {
     <Tab.Navigator tabBar={props => <BottomNavigator {...props} />}>
       <Tab.Screen name="Form" component={screens.Form} />
       <Tab.Screen name="Storage" component={screens.Storage} />
+      <Tab.Screen name="Sync" component={screens.sync} />
     </Tab.Navigator>
   );
 };

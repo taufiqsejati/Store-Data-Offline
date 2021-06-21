@@ -70,7 +70,7 @@ const Form = ({params}) => {
       });
   };
   return (
-    <View style={{flex: 1, backgroundColor: 'white', padding: 16}}>
+    <View style={{flex: 1, padding: 16}}>
       <View style={{flex: 1}}>
         <Text style={{fontSize: 16, fontWeight: '500'}}>Formulir</Text>
         <Gap height={16} />
