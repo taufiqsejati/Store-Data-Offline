@@ -51,9 +51,13 @@ const Storage = ({params}) => {
     const data = {
       title: form.title,
       body: form.body,
-      userId: form.userId,
+      // userId: form.userId,
     };
-    Axios.post('https://jsonplaceholder.typicode.com/posts', data)
+    Axios.post(
+      'https://crudcrud.com/api/d9e2763c0f6c4e48a3aa4027fd2a04d1/unicorns',
+      data,
+    )
+      // Axios.post('https://jsonplaceholder.typicode.com/posts', data)
       .then(response => {
         console.log(response.data);
         showMessage('Data berhasil terkirim', 'success');

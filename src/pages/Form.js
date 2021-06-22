@@ -13,8 +13,8 @@ import Axios from 'axios';
 
 const Form = ({params}) => {
   const [form, setForm] = useForm({
-    title: 'Bukalapak',
-    body: 'Emang cincayyy tidak lebay tidak maksa',
+    title: 'React Native JS',
+    body: 'React Native JS code runs as a web worker inside this tab',
     userId: 1,
   });
   const onSubmit = () => {
@@ -51,9 +51,13 @@ const Form = ({params}) => {
     const data = {
       title: form.title,
       body: form.body,
-      userId: 1,
+      // userId: 1,
     };
-    Axios.post('https://jsonplaceholder.typicode.com/posts', data)
+    Axios.post(
+      'https://crudcrud.com/api/d9e2763c0f6c4e48a3aa4027fd2a04d1/unicorns',
+      data,
+    )
+      // Axios.post('https://jsonplaceholder.typicode.com/posts', data)
       .then(response => {
         console.log(response.data);
         showMessage('Data berhasil terkirim', 'success');

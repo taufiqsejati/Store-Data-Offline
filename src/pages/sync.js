@@ -1,61 +1,71 @@
 import Axios from 'axios';
-import React, {useState, useEffect} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {Gap, Button} from '../components';
-import {getData, removeIndex, showMessage} from '../utils';
+import React, {useEffect, useState} from 'react';
+import {
+  StyleSheet,
+  Text,
+  View,
+  FlatList,
+  RefreshControl,
+  TouchableOpacity,
+} from 'react-native';
+import {Button, Gap, ListEmpty} from '../components';
+import {getData, removeValue, showMessage} from '../utils';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
 const sync = () => {
-  const [list, setList] = useState([]);
+  const [list, setlist] = useState([]);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [error, setError] = useState(false);
   const getDaata = () => {
-    getData('form').then(res => {
-      setList(res);
-    });
-  };
-
-  const onRemove = args => {
-    removeIndex('form', args).then(() => {
-      setTimeout(() => {
-        getDaata();
-      }, 2000);
-    });
-  };
-  const onSubmit = form => {
-    getData('form').then(res => {
-      if (res) {
-        const title = res.map(forme => {
-          return forme.title;
-        });
-        if (title.includes(form.title)) {
-          showMessage('Data gagal terkirim');
+    Axios.get(
+      'https://crudcrud.com/api/d9e2763c0f6c4e48a3aa4027fd2a04d1/unicorns/',
+    )
+      .then(res => {
+        console.log('pendekatan :', res.data);
+        setlist(res.data);
+        setIsRefreshing(false);
+        setError(false);
+      })
+      .catch(error => {
+        if (error.response) {
+          setError(true);
+          showMessage(error.toString());
+        } else if (error.request) {
+          setError(true);
+          showMessage(error.toString());
+        } else {
         }
-      }
-    });
+      });
+  };
+  useEffect(() => {
+    getDaata();
+  }, []);
+  const handleRefresh = () => {
+    setIsRefreshing(true);
+    getDaata();
+  };
+  const onRemove = () => {
+    removeValue('form');
   };
   const callApi = args => {
-    // console.log(args);
     const promises = args.map(item => {
       const data = {
         title: item.title,
         body: item.body,
-        userId: item.userId,
+        // userId: item.userId,
       };
-      const movieUrl = 'https://jsonplaceholder.typicode.com/posts';
+      const movieUrl =
+        'https://crudcrud.com/api/d9e2763c0f6c4e48a3aa4027fd2a04d1/unicorns';
+      // const movieUrl = 'https://jsonplaceholder.typicode.com/posts';
       return Axios.post(movieUrl, data);
     });
     Axios.all(promises)
-      .then(results => {
-        console.log(results);
-        const title = results.map(forme => {
-          // return removeIndex('form', forme.data.title);
-          return forme.data.title;
+      .then(res => {
+        const data = res.map(item => {
+          return item.data;
         });
-
-        title.map(item => {
-          return removeIndex('form', item);
-        });
-
-        // console.log('wew :', title);
-        // removeIndex('form', title);
+        console.log('Yang di upload :', data);
+        onRemove();
       })
       .catch(error => {
         if (error.response) {
@@ -70,28 +80,91 @@ const sync = () => {
   const onCallApiAll = () => {
     getData('form').then(res => {
       if (res) {
-        // const title = res.map(forme => {
-        //   return forme.title;
-        // });
-
         callApi(res);
       }
     });
   };
+
   return (
-    <View style={{flex: 1, padding: 16}}>
-      <View style={{flex: 1}}>
-        <Text style={{fontSize: 16, fontWeight: '500'}}>Sync</Text>
-        <Gap height={16} />
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-          <Button
-            text="Remove"
-            onPress={onCallApiAll}
-            color={'grey'}
-            textColor={'white'}
-          />
-        </View>
-      </View>
+    <View
+      style={{
+        flex: 1,
+        paddingHorizontal: 16,
+        paddingTop: 16,
+      }}>
+      <Text style={{fontSize: 16, fontWeight: '500', marginBottom: 16}}>
+        Storage Online
+      </Text>
+      {error ? (
+        <ListEmpty type={1} />
+      ) : (
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={list}
+          keyExtractor={(item, index) => index}
+          ListEmptyComponent={<ListEmpty type={1} />}
+          refreshControl={
+            <RefreshControl
+              colors={['#9Bd35A', '#689F38']}
+              refreshing={isRefreshing}
+              onRefresh={handleRefresh}
+            />
+          }
+          renderItem={({item}) => {
+            return (
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: 'white',
+                  borderRadius: 8,
+                  shadowColor: 'black',
+                  shadowOffset: {width: 0, height: 7},
+                  shadowOpacity: 0.5,
+                  shadowRadius: 10,
+                  marginBottom: 16,
+                  overflow: 'hidden',
+                }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                  }}>
+                  <View
+                    style={{
+                      flex: 1,
+                      backgroundColor: 'white',
+                      padding: 15,
+                      alignSelf: 'center',
+                    }}>
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{width: '20%'}}>
+                        <Text style={{fontSize: 14, fontWeight: '500'}}>
+                          Title :
+                        </Text>
+                      </View>
+                      <View style={{width: '80%'}}>
+                        <Text>{item.title}</Text>
+                      </View>
+                    </View>
+
+                    <Gap height={10} />
+
+                    <View style={{flexDirection: 'row'}}>
+                      <View style={{width: '20%'}}>
+                        <Text style={{fontSize: 14, fontWeight: '500'}}>
+                          Body :
+                        </Text>
+                      </View>
+                      <View style={{width: '80%'}}>
+                        <Text>{item.body}</Text>
+                      </View>
+                    </View>
+                  </View>
+                </View>
+              </View>
+            );
+          }}
+        />
+      )}
     </View>
   );
 };
