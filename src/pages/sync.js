@@ -25,7 +25,7 @@ const sync = () => {
 
   const getDaata = () => {
     Axios.get(
-      'https://crudcrud.com/api/d9e2763c0f6c4e48a3aa4027fd2a04d1/unicorns/',
+      'https://crudcrud.com/api/83c6998f70f9452c9cb6c919f6ef6c27/unicorns',
     )
       .then(res => {
         console.log('pendekatan :', res.data);
@@ -74,7 +74,7 @@ const sync = () => {
         // userId: item.userId,
       };
       const movieUrl =
-        'https://crudcrud.com/api/d9e2763c0f6c4e48a3aa4027fd2a04d1/unicorns';
+        'https://crudcrud.com/api/83c6998f70f9452c9cb6c919f6ef6c27/unicorns';
       // const movieUrl = 'https://jsonplaceholder.typicode.com/posts';
       return Axios.post(movieUrl, data);
     });
