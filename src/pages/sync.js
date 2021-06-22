@@ -1,21 +1,28 @@
 import Axios from 'axios';
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  StyleSheet,
-  Text,
-  View,
   FlatList,
-  RefreshControl,
-  TouchableOpacity,
+  RefreshControl, StyleSheet,
+  Text,
+  View
 } from 'react-native';
-import {Button, Gap, ListEmpty} from '../components';
-import {getData, removeValue, showMessage} from '../utils';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Gap, ListEmpty, NetworkError } from '../components';
+import { getData, removeValue, showMessage } from '../utils';
 
 const sync = () => {
   const [list, setlist] = useState([]);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState(false);
+
+  useEffect(() => {
+    setIsRefreshing(true);
+    getDaata();
+  }, []);
+
+  const handleRefresh = () => {
+    onCallApiAll();
+  };
+
   const getDaata = () => {
     Axios.get(
       'https://crudcrud.com/api/d9e2763c0f6c4e48a3aa4027fd2a04d1/unicorns/',
@@ -37,16 +44,28 @@ const sync = () => {
         }
       });
   };
-  useEffect(() => {
-    getDaata();
-  }, []);
-  const handleRefresh = () => {
-    setIsRefreshing(true);
-    getDaata();
-  };
+
   const onRemove = () => {
-    removeValue('form');
+    removeValue('form').then(() => {
+      setTimeout(() => {
+        setIsRefreshing(true);
+        getDaata();
+      }, 2000);
+    });
   };
+
+  const onCallApiAll = () => {
+    getData('form').then(res => {
+      if (res) {
+        setIsRefreshing(true);
+        callApi(res);
+      } else {
+        setIsRefreshing(true);
+    getDaata();
+      }
+    });
+  };
+
   const callApi = args => {
     const promises = args.map(item => {
       const data = {
@@ -66,23 +85,19 @@ const sync = () => {
         });
         console.log('Yang di upload :', data);
         onRemove();
+        setIsRefreshing(false);
+        setError(false);
       })
       .catch(error => {
         if (error.response) {
+          setError(true);
           showMessage('Error');
         } else if (error.request) {
+          setError(true);
           showMessage('Error');
         } else {
         }
       });
-  };
-
-  const onCallApiAll = () => {
-    getData('form').then(res => {
-      if (res) {
-        callApi(res);
-      }
-    });
   };
 
   return (
@@ -96,7 +111,7 @@ const sync = () => {
         Storage Online
       </Text>
       {error ? (
-        <ListEmpty type={1} />
+        <NetworkError handleRefresh={handleRefresh} />
       ) : (
         <FlatList
           showsVerticalScrollIndicator={false}
