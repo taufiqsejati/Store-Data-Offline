@@ -10,6 +10,7 @@ import {Gap, ListEmpty} from '../components';
 import {getData, removeIndex, showMessage, storeData2} from '../utils';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Axios from 'axios';
+import {Api} from '../config/Api';
 
 const Storage = ({params}) => {
   const [list, setList] = useState([]);
@@ -53,10 +54,7 @@ const Storage = ({params}) => {
       body: form.body,
       // userId: form.userId,
     };
-    Axios.post(
-      'https://crudcrud.com/api/83c6998f70f9452c9cb6c919f6ef6c27/unicorns',
-      data,
-    )
+    Axios.post(Api, data)
       // Axios.post('https://jsonplaceholder.typicode.com/posts', data)
       .then(response => {
         console.log(response.data);

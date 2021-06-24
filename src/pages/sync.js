@@ -1,13 +1,9 @@
 import Axios from 'axios';
-import React, { useEffect, useState } from 'react';
-import {
-  FlatList,
-  RefreshControl, StyleSheet,
-  Text,
-  View
-} from 'react-native';
-import { Gap, ListEmpty, NetworkError } from '../components';
-import { getData, removeValue, showMessage } from '../utils';
+import React, {useEffect, useState} from 'react';
+import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
+import {Gap, ListEmpty, NetworkError} from '../components';
+import {Api} from '../config/Api';
+import {getData, removeValue, showMessage} from '../utils';
 
 const sync = () => {
   const [list, setlist] = useState([]);
@@ -24,9 +20,7 @@ const sync = () => {
   };
 
   const getDaata = () => {
-    Axios.get(
-      'https://crudcrud.com/api/83c6998f70f9452c9cb6c919f6ef6c27/unicorns',
-    )
+    Axios.get(Api)
       .then(res => {
         console.log('pendekatan :', res.data);
         setlist(res.data);
@@ -61,7 +55,7 @@ const sync = () => {
         callApi(res);
       } else {
         setIsRefreshing(true);
-    getDaata();
+        getDaata();
       }
     });
   };
@@ -73,8 +67,7 @@ const sync = () => {
         body: item.body,
         // userId: item.userId,
       };
-      const movieUrl =
-        'https://crudcrud.com/api/83c6998f70f9452c9cb6c919f6ef6c27/unicorns';
+      const movieUrl = Api;
       // const movieUrl = 'https://jsonplaceholder.typicode.com/posts';
       return Axios.post(movieUrl, data);
     });
